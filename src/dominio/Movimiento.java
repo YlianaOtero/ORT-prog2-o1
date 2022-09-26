@@ -33,6 +33,8 @@ public class Movimiento extends Tablero {
         this.filaInicial = fila;
         this.colInicial = col;
         this.distanciaAlCentro = calcularDistanciaAlCentro(fila, col);
+        this.posPosiblesConCaptura = listarPosConCaptura(fila, col, unTablero);
+        this.posPosiblesSinCaptura = listarPosSinCaptura(fila, col, unTablero);
     }
     
     //METODOS DE ACCESO
@@ -56,8 +58,61 @@ public class Movimiento extends Tablero {
         return this.posPosiblesConCaptura;
     }
     
-    
     //METODOS PRIVADOS: hallar diferentes atributos
+    private ArrayList<String> listarPosConCaptura(int fila, int col, Tablero unTablero) {     
+        //HORIZONTALES:
+        ArrayList<String> posiciones = listarPosConCapturaHorizontal(fila, col, unTablero);
+        
+        //VERTICALES:
+        posiciones.addAll(listarPosConCapturaVertical(fila, col, unTablero));
+        
+        //DIAGONALES: POR HACER
+        posiciones.addAll(listarPosConCapturaDiagonal(fila, col, unTablero));
+        
+        return posiciones;
+    }
+    
+    private ArrayList<String> listarPosSinCaptura(int fila, int col, Tablero unTablero) {        
+        //HORIZONTALES:
+        ArrayList<String> posiciones = listarPosSinCapturaHorizontal(fila, col, unTablero);
+        
+        //VERTICALES:
+        posiciones.addAll(listarPosSinCapturaVertical(fila, col, unTablero));
+        
+        //DIAGONALES:
+        posiciones.addAll(listarPosSinCapturaDiagonal(fila, col, unTablero));
+        
+        return posiciones;
+    }
+    
+    private int calcularDistanciaAlCentro(int fila, int col) {
+        int distancia = 0;
+        String pos = fila + "-" + col;
+        
+        if (Arrays.asList(posConDistanciaUno).contains(pos)) {
+          distancia = 1;  
+          
+        } else if (Arrays.asList(posConDistanciaDos).contains(pos)) {
+          distancia = 2;  
+          
+        } else if (Arrays.asList(posConDistanciaTres).contains(pos)) {
+          distancia = 3;  
+          
+        } else if (Arrays.asList(posConDistanciaCuatro).contains(pos)) {
+          distancia = 4;  
+          
+        } else if (Arrays.asList(posConDistanciaCinco).contains(pos)){
+            distancia = 5;
+            
+        } else {
+            distancia = 6;
+        }
+        
+        return distancia;
+    }
+    
+    
+    //METODOS AUXILIARES
     private ArrayList<String> listarPosConCapturaHorizontal(int fila, int col, Tablero unTablero) {
         ArrayList<String> posiciones = new ArrayList<String>();
         
@@ -67,7 +122,7 @@ public class Movimiento extends Tablero {
             if (!unTablero.esPosicionVacia(fila, j)) {
                 libre = false;
             } else {
-                posiciones.add(posCorrespondiente(fila, j));
+                posiciones.add(fila + "-" + j);
             }
         }
         
@@ -76,7 +131,7 @@ public class Movimiento extends Tablero {
             if (!unTablero.esPosicionVacia(fila, j)) {
                 libre = false;
             } else {
-                posiciones.add(posCorrespondiente(fila, j));
+                posiciones.add(fila + "-" + j);
             }
         }
         
@@ -92,7 +147,7 @@ public class Movimiento extends Tablero {
             if (!unTablero.esPosicionVacia(i, col)) {
                 libre = false;
             } else {
-                posiciones.add(posCorrespondiente(i, col));
+                posiciones.add(i + "-" + col);
             }
         }
         
@@ -101,91 +156,70 @@ public class Movimiento extends Tablero {
             if (!unTablero.esPosicionVacia(i, col)) {
                 libre = false;
             } else {
-                posiciones.add(posCorrespondiente(i, col));
+                posiciones.add(i + "-" + col);
             }
         }
         
         return posiciones;
     }
     
-    private ArrayList<String> listarPosConCaptura(String unaPosicion, Tablero unTablero) {
+    private ArrayList<String> listarPosConCapturaDiagonal(int fila, int col, Tablero unTablero) {
         ArrayList<String> posiciones = new ArrayList<String>();
         
-        int filaPosicion = filaCorrespondiente(unaPosicion);
-        int colPosicion = colCorrespondiente(unaPosicion);
-        
-        //HORIZONTALES:
-        posiciones = listarPosConCapturaHorizontal(filaPosicion, colPosicion, unTablero);
-        //VERTICALES:
-        posiciones.addAll(listarPosConCapturaVertical(filaPosicion, colPosicion, unTablero));
-        //DIAGONALES: TO DO
-        
+        //POR HACER
         
         return posiciones;
     }
     
-    private ArrayList<String> listarPosSinCaptura(String unaPosicion, Tablero unTablero) {        
+    private ArrayList<String> listarPosSinCapturaHorizontal(int fila, int col, Tablero unTablero) {
         ArrayList<String> posiciones = new ArrayList<String>();
         
-        char[][] tablero = unTablero.getTablero();
-        int filaPosicion = filaCorrespondiente(unaPosicion);
-        int colPosicion = colCorrespondiente(unaPosicion);
-        
-        //HORIZONTALES:
-        if (colPosicion > 0 && unTablero.esPosicionVacia(filaPosicion, colPosicion-1)) {
-            posiciones.add(posCorrespondiente(filaPosicion, colPosicion-1));
-        }
-        if (colPosicion < unTablero.getTamanio()-1 && unTablero.esPosicionVacia(filaPosicion, colPosicion+1)) {
-            posiciones.add(posCorrespondiente(filaPosicion, colPosicion+1));
+        if (col > 0 && unTablero.esPosicionVacia(fila, col-1)) {
+            posiciones.add(fila + "-" + (col-1));
         }
         
-        //VERTICALES:
-        if (filaPosicion > 0 && unTablero.esPosicionVacia(filaPosicion-1, colPosicion)) {
-            posiciones.add(posCorrespondiente(filaPosicion-1, colPosicion));
-        }
-        if (filaPosicion < unTablero.getTamanio()-1 && unTablero.esPosicionVacia(filaPosicion+1, colPosicion)) {
-            posiciones.add(posCorrespondiente(filaPosicion+1, colPosicion));
-        }
-        
-        //DIAGONALES:
-        if (filaPosicion > 0) {
-            if (colPosicion > 0 && unTablero.esPosicionVacia(filaPosicion-1, colPosicion-1)) {
-                posiciones.add(posCorrespondiente(filaPosicion-1, colPosicion-1));
-            }
-            if (colPosicion < unTablero.getTamanio()-1 && unTablero.esPosicionVacia(filaPosicion-1, colPosicion+1)) {
-                posiciones.add(posCorrespondiente(filaPosicion-1, colPosicion+1));
-            }
-        }
-        if (filaPosicion < unTablero.getTamanio()-1) {
-            if (colPosicion > 0 && unTablero.esPosicionVacia(filaPosicion+1, colPosicion-1)) {
-                posiciones.add(posCorrespondiente(filaPosicion+1, colPosicion-1));
-            }
-            if (colPosicion < unTablero.getTamanio()-1 && unTablero.esPosicionVacia(filaPosicion+1, colPosicion+1)) {
-                posiciones.add(posCorrespondiente(filaPosicion+1, colPosicion+1));
-            }
+        if (col < unTablero.getTamanio()-1 && unTablero.esPosicionVacia(fila, col+1)) {
+            posiciones.add(fila + "-" + (col+1));
         }
         
         return posiciones;
     }
     
-    private int calcularDistanciaAlCentro(int fila, int col) {
-        int distancia = 0;
-        String pos = fila + "-" + col;
-        if (Arrays.asList(posConDistanciaUno).contains(pos)) {
-          distancia = 1;  
-        } else if (Arrays.asList(posConDistanciaDos).contains(pos)) {
-          distancia = 2;  
-        } else if (Arrays.asList(posConDistanciaTres).contains(pos)) {
-          distancia = 3;  
-        } else if (Arrays.asList(posConDistanciaCuatro).contains(pos)) {
-          distancia = 4;  
-        } else if (Arrays.asList(posConDistanciaCinco).contains(pos)){
-            distancia = 5;
-        } else {
-            distancia = 6;
+    private ArrayList<String> listarPosSinCapturaVertical(int fila, int col, Tablero unTablero) {
+        ArrayList<String> posiciones = new ArrayList<String>();
+        
+        if (fila > 0 && unTablero.esPosicionVacia(fila-1, col)) {
+            posiciones.add((fila-1) + "-" + col);
+        }
+        if (fila < unTablero.getTamanio()-1 && unTablero.esPosicionVacia(fila+1, col)) {
+            posiciones.add((fila+1) + "-" + col);
         }
         
-        return distancia;
+        return posiciones;
+    }
+    
+    private ArrayList<String> listarPosSinCapturaDiagonal(int fila, int col, Tablero unTablero) {
+        ArrayList<String> posiciones = new ArrayList<String>();
+        
+        if (fila > 0) {
+            if (col > 0 && unTablero.esPosicionVacia(fila-1, col-1)) {
+                posiciones.add((fila-1) + "-" + (col-1));
+            }
+            if (col < unTablero.getTamanio()-1 && unTablero.esPosicionVacia(fila-1, col+1)) {
+                posiciones.add((fila-1) + "-" + (col+1));
+            }
+        }
+        
+        if (fila < unTablero.getTamanio()-1) {
+            if (col > 0 && unTablero.esPosicionVacia(fila+1, col-1)) {
+                posiciones.add((fila+1) + "-" + (col-1));
+            }
+            if (col < unTablero.getTamanio()-1 && unTablero.esPosicionVacia(fila+1, col+1)) {
+                posiciones.add((fila+1) + "-" + (col+1));
+            }
+        }
+        
+        return posiciones;
     }
     
 }
