@@ -5,49 +5,23 @@
 package dominio;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  *
  * @author ylian
  */
-public class Movimiento extends Tablero {
-    private int filaInicial;
-    private int colInicial;
-    private int distanciaAlCentro;
+public class ListaPosPosibles extends Posicion {
+    private Posicion inicio;
     private ArrayList<String> posPosiblesConCaptura;
     private ArrayList<String> posPosiblesSinCaptura;
     
-    private static String[] posConDistanciaUno = {"2-2", "2-3", "3-2", "3-3"};
-    private static String[] posConDistanciaDos = {"1-2", "1-3", "2-1", "2-4",  
-                                                  "3-1", "3-4", "4-2", "4-3"};
-    private static String[] posConDistanciaTres = {"1-1", "1-4", "5-1", "5-4"};
-    private static String[] posConDistanciaCuatro = {"0-2", "0-3", "2-0", "2-3",  
-                                                     "2-5", "3-5", "5-2", "5-3"};
-    private static String[] posConDistanciaCinco = {"0-1", "0-4", "1-0", "1-5",
-                                                    "4-0", "4-5", "5-1", "5-4"};
-    private static String[] posConDistanciaSeis = {"0-0", "0-5", "5-0", "5-5"};
-    
-    //CONSTRUCTORES
-    public Movimiento(int fila, int col, Tablero unTablero) {
-        this.filaInicial = fila;
-        this.colInicial = col;
-        this.distanciaAlCentro = calcularDistanciaAlCentro(fila, col);
+    public ListaPosPosibles(Posicion unaPosicion, Tablero unTablero) {
+        int fila = unaPosicion.getFila();
+        int col = unaPosicion.getCol();
+        
+        this.inicio = unaPosicion;
         this.posPosiblesConCaptura = listarPosConCaptura(fila, col, unTablero);
-        this.posPosiblesSinCaptura = listarPosSinCaptura(fila, col, unTablero);
-    }
-    
-    //METODOS DE ACCESO
-    public int getDistanciaAlCentro() {
-        return this.distanciaAlCentro;
-    }
-    
-    public int getFilaInicial() {
-        return this.filaInicial;
-    }
-    
-    public int getColInicial() {
-        return this.colInicial;
+        this.posPosiblesSinCaptura = listarPosConCaptura(fila, col, unTablero);
     }
     
     public ArrayList<String> getPosPosiblesSinCaptura() {
@@ -84,33 +58,6 @@ public class Movimiento extends Tablero {
         
         return posiciones;
     }
-    
-    private int calcularDistanciaAlCentro(int fila, int col) {
-        int distancia = 0;
-        String pos = fila + "-" + col;
-        
-        if (Arrays.asList(posConDistanciaUno).contains(pos)) {
-          distancia = 1;  
-          
-        } else if (Arrays.asList(posConDistanciaDos).contains(pos)) {
-          distancia = 2;  
-          
-        } else if (Arrays.asList(posConDistanciaTres).contains(pos)) {
-          distancia = 3;  
-          
-        } else if (Arrays.asList(posConDistanciaCuatro).contains(pos)) {
-          distancia = 4;  
-          
-        } else if (Arrays.asList(posConDistanciaCinco).contains(pos)){
-            distancia = 5;
-            
-        } else {
-            distancia = 6;
-        }
-        
-        return distancia;
-    }
-    
     
     //METODOS AUXILIARES
     private ArrayList<String> listarPosConCapturaHorizontal(int fila, int col, Tablero unTablero) {
@@ -221,5 +168,4 @@ public class Movimiento extends Tablero {
         
         return posiciones;
     }
-    
 }
