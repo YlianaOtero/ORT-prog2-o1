@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dominio;
+
+import java.util.ArrayList;
+
 /**
  *
  * @author ylian
@@ -11,6 +14,7 @@ public class ListaPosPosibles {
     private Posicion inicio;
     private ListaPosConCaptura posPosiblesConCaptura;
     private ListaPosSinCaptura posPosiblesSinCaptura;
+    private ArrayList<Posicion> posPosibles;
     
     public ListaPosPosibles(Posicion unaPosicion, Tablero unTablero) {
         this.inicio = unaPosicion;

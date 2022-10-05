@@ -102,5 +102,6 @@ public class Tablero {
         }
         
         return esVacia;
-    }  
+    } 
+   
 }
