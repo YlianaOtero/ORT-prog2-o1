@@ -113,6 +113,58 @@ public class ListaPosConCaptura {
     //FALTA LISTAR DIAGONAL
 
     private ArrayList<Posicion> listarPosDiagonal(Posicion unaPosicion, Tablero unTablero) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ArrayList<Posicion> posiciones = new ArrayList<Posicion>();
+                
+        boolean frenar = false;
+        
+        int fila = unaPosicion.getFila();
+        int col = unaPosicion.getCol();
+        
+        //DE IZQ A DERECHA CRECIENTE
+        for (int i = fila, j = col; i >= 0 && j < unTablero.getTamanio() && !frenar; i--, j++) {
+            if (unTablero.esLugarVacio(i, j)) {
+                frenar = true;
+                Posicion actual = new Posicion(i, j, unTablero);
+                if (puedeComer(unaPosicion, actual, unTablero)) {
+                    posiciones.add(actual);
+                }
+            }
+        }
+        
+        //DE IZQ A DER DECRECIENTE
+        for (int i = fila, j = col; i < unTablero.getTamanio() && j < unTablero.getTamanio(); i++, j++) {
+            if (unTablero.esLugarVacio(i, j)) {
+                frenar = true;
+                Posicion actual = new Posicion(i, j, unTablero);
+                if (puedeComer(unaPosicion, actual, unTablero)) {
+                    posiciones.add(actual);
+                }
+            }
+        }
+        
+        //DE DER A IZQ CRECIENTE
+        for (int i = fila, j = col; i >= 0 && j >= 0 && !frenar; i--, j--) {
+            if (unTablero.esLugarVacio(i, j)) {
+                frenar = true;
+                Posicion actual = new Posicion(i, j, unTablero);
+                if (puedeComer(unaPosicion, actual, unTablero)) {
+                    posiciones.add(actual);
+                }
+            }
+        }
+        
+        //DE DER A IZQ DECRECIENTE
+        for (int i = fila, j = col; i < unTablero.getTamanio() && j >= 0 && !frenar; i++, j--) {
+            if (unTablero.esLugarVacio(i, j)) {
+                frenar = true;
+                Posicion actual = new Posicion(i, j, unTablero);
+                if (puedeComer(unaPosicion, actual, unTablero)) {
+                    posiciones.add(actual);
+                }
+            }
+        }
+
+        return posiciones;
     }
+    
 }
