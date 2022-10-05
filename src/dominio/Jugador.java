@@ -51,10 +51,10 @@ public class Jugador {
     }
     
     
-    public boolean tienenMismoAlias(Jugador unJ, ArrayList<Jugador>lista){
+    public boolean tienenMismoAlias(Jugador unJ, ListaJugadores lista){
        
-        for (int i=0; i < listaJugadores.size(); i++) {
-            return (this.getAlias().equals(listaJugadores.get(i).getAlias()));
+        for (int i=0; i < lista.size(); i++) {
+            return (this.getAlias().equals(lista.jugadorAt(i).getAlias()));
            
         }
     } 
