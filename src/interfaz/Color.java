@@ -18,24 +18,28 @@ public class Color {
     private String codigo;
     private String nombre;
     
-    private static String negro = "\\u001B[30m";
-    private static String rojo = "\\u001B[31m";
-    private static String azul = "\\u001B[34m";
+    private static String Negro = "\\u001B[30m";
+    private static String Rojo = "\\u001B[31m";
+    private static String Azul = "\\u001B[34m";
+    private static String Verde = "\\u001b[32;1m";
     
     public Color() {
-        //Color negro
-        this.codigo = negro;
+        this.codigo = Negro;
+        this.nombre = "negro";
     }
     
     public void setColor(String unColor) {
         if (unColor.equalsIgnoreCase("rojo")) {
-            this.codigo = rojo;
+            this.codigo = Rojo;
             this.nombre = "rojo";
         } else if (unColor.equalsIgnoreCase("azul")) {
-            this.codigo = azul;
+            this.codigo = Azul;
             this.nombre = "azul";
+        } else if (unColor.equalsIgnoreCase("verde")){
+            this.codigo = Verde;
+            this.nombre = "verde";
         } else {
-            this.codigo = negro;
+            this.codigo = Negro;
             this.nombre = "negro";
         }
     }
