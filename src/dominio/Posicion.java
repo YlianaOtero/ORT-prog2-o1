@@ -51,7 +51,7 @@ public class Posicion {
     }
     
     public char getFichaEnPos(Tablero unTablero) {
-        return unTablero.getTablero()[this.fila][this.col];
+        return unTablero.getElem(this.fila, this.col);
     }
     
     private int calcularDistanciaAlCentro(int fila, int col) {
@@ -90,6 +90,11 @@ public class Posicion {
         }
         
         return esta;
+    }
+    
+    @Override 
+    public String toString() {
+        return this.getFila() + "-" + this.getCol();
     }
     
 }

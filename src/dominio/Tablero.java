@@ -84,6 +84,10 @@ public class Tablero {
         return this.tablero;
     }
     
+    public char getElem(int fila, int col) {
+        return this.tablero[fila][col];
+    }
+    
     public void comerFichaAzul(int fila, int col) {
         this.tablero[fila][col] = 'R';
         cantFichasRojas--;

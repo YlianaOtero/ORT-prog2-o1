@@ -27,7 +27,7 @@ public class ListaPosSinCaptura {
         return posiciones;
     }
     
-    private ArrayList<Posicion> listarPosHorizontal(Posicion unaPosicion, Tablero unTablero) {
+    public ArrayList<Posicion> listarPosHorizontal(Posicion unaPosicion, Tablero unTablero) {
         int fila = unaPosicion.getFila();
         int col = unaPosicion.getCol();
         
@@ -93,5 +93,17 @@ public class ListaPosSinCaptura {
         }
         
         return posiciones;
+    }
+    
+    @Override 
+    public String toString() {
+        String lista = "";
+        
+        for (int i = 0; i < this.lista.size(); i++) {
+            Posicion elem = this.lista.get(i);
+            lista += elem.getFila() + "-" + elem.getCol() + " | ";
+        }
+        
+        return lista;
     }
 }

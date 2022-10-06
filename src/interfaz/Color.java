@@ -18,10 +18,10 @@ public class Color {
     private String codigo;
     private String nombre;
     
-    private static String Negro = "\\u001B[30m";
-    private static String Rojo = "\\u001B[31m";
-    private static String Azul = "\\u001B[34m";
-    private static String Verde = "\\u001b[32;1m";
+    private static String Negro = "\u001B[30m";
+    private static String Rojo = "\u001B[31m";
+    private static String Azul = "\u001B[34m";
+    private static String Verde = "\u001b[32;1m";
     
     public Color() {
         this.codigo = Negro;
