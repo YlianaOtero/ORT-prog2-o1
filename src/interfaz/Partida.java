@@ -4,18 +4,23 @@
  */
 package interfaz;
 
+import dominio.Jugador;
+
 /**
  *
  * @author ylian
  */
 public class Partida {
+    private Jugador jugador1;
+    private Jugador jugador2;
     
     
-    public Partida(String configTablero, <ArrayList> jugadores) {
-        //CREAR CONSTRUCTOR
+    public Partida(String configTablero, Jugador[] jugadores) {
+        this.jugador1 = jugadores[0];
+        this.jugador2 = jugadores[1];
     }
 
-    void iniciarPartida() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void iniciarPartida() {
+        //FALTA PROGRAMAR ESTE METODO
     }
 }

@@ -44,4 +44,15 @@ public class ListaJugadores {
         }
         return existe; 
     }
+    
+    @Override
+    public String toString() {
+        String cadena = "";
+        for (int i = 0; i < this.size(); i++) {
+            cadena += i+1 + ". " + jugadorAt(i).getNombre() + "         " + 
+                    jugadorAt(i).getAlias() + "         " + jugadorAt(i).getEdad() + "\n";
+        }
+        
+        return cadena;
+    }
 }

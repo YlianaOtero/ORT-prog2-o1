@@ -93,14 +93,15 @@ public class Sistema {
     }
    
     private static void registrarJugador(String nombre, String edad, String alias) {
-        int edadNumerica = Character.getNumericValue(edad.charAt(0));
+        int edadNumerica = Integer.valueOf(edad);
         Jugador jugador = new Jugador(nombre, edadNumerica, alias);
         Jugadores.agregarJugador(jugador);
         System.out.println("El jugador " +alias + " ha sido registrado correctamente.");
     }
     
     private static void jugarPartida() {
-       Partida nueva = new Partida(ConfigTablero, Jugadores);
+       Jugador[] jugadores = pedirJugadoresPartida();
+       Partida nueva = new Partida(ConfigTablero, jugadores);
        nueva.iniciarPartida();
     }
    
@@ -135,8 +136,6 @@ public class Sistema {
     private static String[] pedirJugador() {
         String[] datos = new String[3];
         
-        Scanner in = new Scanner(System.in);
-        
         System.out.println("Ingrese nombre del jugador:");
         datos[0] = leerNombreJugador();
         
@@ -147,6 +146,36 @@ public class Sistema {
         datos[2] = leerAliasJugador();
         
         return datos;
+    }
+    
+    private static Jugador[] pedirJugadoresPartida() {
+        Jugador[] jugadores = new Jugador[2];
+        
+        mostrarListaJugadores();
+        
+        System.out.println("Elija al jugador 1:");
+        jugadores[0] = Jugadores.jugadorAt(leerOpcionJugadores(Jugadores.size())-1);
+        
+        boolean repetido = true;
+        System.out.println("Elija al jugador 2:");
+        while (repetido) {
+            jugadores[1] = Jugadores.jugadorAt(leerOpcionJugadores(Jugadores.size())-1);
+            if (jugadores[1].getAlias().equals(jugadores[0].getAlias())) {
+                System.out.println("Debe elegir dos jugadores diferentes. Ingrese otra opcion:");
+            } else {
+                repetido = false;
+            }
+        }
+        return jugadores;
+    }
+    
+    private static void mostrarListaJugadores() {
+        System.out.println("********************************\n"
+        + "       JUGADORES: \n"
+        + "********************************\n"
+        + "   Nombre            Alias           Edad");
+        System.out.println(Jugadores);
+        System.out.println("********************************");
     }
     
     //LECTURA POR PANTALLA Y MANEJO DE EXCEPCIONES
@@ -258,4 +287,31 @@ public class Sistema {
         }
         return opcion;
     }  
+    
+    private static int leerOpcionJugadores(int max) {
+        Scanner in = new Scanner(System.in);
+        
+        String txtErrorRango = "Debe ingresar un entero entre 1 y " +max +". \n"
+                + "Por favor ingrese un valor correcto: ";
+        
+        int opcion = 0;
+        boolean opcionInvalida = true;
+        
+        while (opcionInvalida) {
+            try {
+                opcion = in.nextInt();
+            
+                if (opcion <= max && opcion >= 1 ) {
+                    opcionInvalida = false;
+                } else {
+                    System.out.println(txtErrorRango);
+                }
+            } catch (InputMismatchException e){
+                System.out.println("Debe ingresar un numero entero. \n"
+                        + "Por favor ingrese un valor correcto: ");
+                in.nextLine();
+            }
+        }
+        return opcion;
+    }
 }
