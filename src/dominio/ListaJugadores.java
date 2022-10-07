@@ -32,4 +32,16 @@ public class ListaJugadores {
     public Jugador jugadorAt(int pos) {
         return this.listaJugadores.get(pos);
     }
+
+    public boolean existeAlias(String opcion) {
+        boolean existe = false;
+        
+        for (int i = 0; i < this.size() && !existe; i++) {
+            String alias = this.jugadorAt(i).getAlias();
+            if (alias.equalsIgnoreCase(opcion)) {
+                existe = true;
+            }
+        }
+        return existe; 
+    }
 }
