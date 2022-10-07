@@ -10,4 +10,12 @@ package interfaz;
  */
 public class Partida {
     
+    
+    public Partida(String configTablero, <ArrayList> jugadores) {
+        //CREAR CONSTRUCTOR
+    }
+
+    void iniciarPartida() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
