@@ -1,6 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+/* ListaJugadores busca facilitar el manejo de un array list de tipo Jugador, a 
+ * traves de metodos utiles para el juego como existeAlias.
  */
 package dominio;
 
@@ -11,48 +10,54 @@ import java.util.ArrayList;
  * @author nalu-
  */
 public class ListaJugadores {
+
     private ArrayList<Jugador> listaJugadores;
-    
-    public ListaJugadores(){
+
+    /*CONSTRUCTORES*/
+    public ListaJugadores() {
         this.listaJugadores = new ArrayList<Jugador>();
     }
-    
-    public ArrayList<Jugador> getListaJugadores(){
+
+    /*METODOS DE ACCESO*/
+    public ArrayList<Jugador> getListaJugadores() {
         return this.listaJugadores;
     }
     
-    public void agregarJugador(Jugador unJugador){
-        this.listaJugadores.add(unJugador);
-    }
-
     public int size() {
         return this.listaJugadores.size();
     }
-    
+
     public Jugador jugadorAt(int pos) {
         return this.listaJugadores.get(pos);
     }
 
+    /*METODOS DE MODIFICACION*/
+    public void agregarJugador(Jugador unJugador) {
+        this.listaJugadores.add(unJugador);
+    }
+
+    /*PREDICADOS*/
     public boolean existeAlias(String opcion) {
         boolean existe = false;
-        
+
         for (int i = 0; i < this.size() && !existe; i++) {
             String alias = this.jugadorAt(i).getAlias();
             if (alias.equalsIgnoreCase(opcion)) {
                 existe = true;
             }
         }
-        return existe; 
+        return existe;
     }
-    
+
+    /*OVERRIDES*/
     @Override
     public String toString() {
         String cadena = "";
         for (int i = 0; i < this.size(); i++) {
-            cadena += i+1 + ". " + jugadorAt(i).getNombre() + "         " + 
-                    jugadorAt(i).getAlias() + "         " + jugadorAt(i).getEdad() + "\n";
+            cadena += i + 1 + ". " + jugadorAt(i).getNombre() + "         "
+                    + jugadorAt(i).getAlias() + "         " + jugadorAt(i).getEdad() + "\n";
         }
-        
+
         return cadena;
     }
 }
