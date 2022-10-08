@@ -22,6 +22,16 @@ public class ListaPosSinCaptura {
         this.tablero = unTablero;
         this.lista = listarPosiciones();
     }
+    
+    /*METODOS DE ACCESO*/
+    public ArrayList<Posicion> getLista() {
+        return this.lista;
+    }
+    
+    /*PREDICADOS*/
+    public boolean hayMovimientos() {
+        return !this.lista.isEmpty();
+    }
 
     /*METODOS DE MODIFICACION*/
     private ArrayList<Posicion> listarPosiciones() {
