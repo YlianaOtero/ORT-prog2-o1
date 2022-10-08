@@ -55,17 +55,31 @@ public class Tablero {
     }
     
     private void llenarTableroPrecargado1(char[][] tablero) {
-        tablero[0][0] = 'R';
-        tablero[5][3] = 'R';
-        tablero[2][2] = 'A';
-        tablero[3][5] = 'A';
-        tablero[4][1] = 'A';
+        for (int i = 0; i < tablero.length; i++) {
+            for (int j = 0; j < tablero[0].length; j++) {
+                if (i == 0 && j== 0 || i == 5 && j == 3) {
+                    tablero[i][j] = 'R';
+                } else if (i == 2 && j== 2 || i == 3 && j == 5 || i == 4 && j == 1) {
+                    tablero[i][j] = 'A';
+                } else {
+                    tablero[i][j] = ' ';
+                }
+            }
+        }
     }
 
     private void llenarTableroPrecargado2(char[][] tablero) {
-        tablero[0][0] = 'R';
-        tablero[5][4] = 'A';
-        tablero[5][5] = 'A';
+        for (int i = 0; i < tablero.length; i++) {
+            for (int j = 0; j < tablero[0].length; j++) {
+                if (i == 0 && j== 0) {
+                    tablero[i][j] = 'R';
+                } else if (i == 5 && j== 4 || i == 5 && j == 5) {
+                    tablero[i][j] = 'A';
+                } else {
+                    tablero[i][j] = ' ';
+                }
+            }
+        }
     }
     
     public int getTamanio() {
