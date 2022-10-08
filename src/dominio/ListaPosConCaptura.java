@@ -1,46 +1,51 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+/*  ListaPosConCaptura se encarga de la lógica de los movimientos con captura del
+ * juego. Un objeto de esta clase tiene una posición a partir de la cual se genera
+ * la lista de posiciones a las cuales se podría desplazar capturando a una ficha,
+ * siempre dentro de un tablero dado.*/
 package dominio;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  *
  * @author ylian
  */
 public class ListaPosConCaptura {
+    
     private Posicion inicio;
+    private Tablero tablero;
     private ArrayList<Posicion> lista;
     
+    /*CONSTRUCTORES*/
     public ListaPosConCaptura(Posicion unaPosicion, Tablero unTablero) {
         this.inicio = unaPosicion;
-        this.lista = listarPosiciones(unaPosicion, unTablero);
+        this.tablero = unTablero;
+        this.lista = listarPosiciones();
     }
     
-    private ArrayList<Posicion> listarPosiciones(Posicion unaPosicion, Tablero unTablero) {
-        ArrayList<Posicion> posiciones = listarPosHorizontal(unaPosicion, unTablero);
-        posiciones.addAll(listarPosVertical(unaPosicion, unTablero));
-        posiciones.addAll(listarPosDiagonal(unaPosicion, unTablero));
+    /*METODOS DE MODIFICACION*/
+    private ArrayList<Posicion> listarPosiciones() {
+        ArrayList<Posicion> posiciones = listarPosHorizontal();
+        posiciones.addAll(listarPosVertical());
+        posiciones.addAll(listarPosDiagonal());
         
         return posiciones;
     }
 
-    public ArrayList<Posicion> listarPosHorizontal(Posicion unaPosicion, Tablero unTablero) {
+    /*METODOS AUXILIARES*/
+    private ArrayList<Posicion> listarPosHorizontal() {
         ArrayList<Posicion> posiciones = new ArrayList<Posicion>();
                 
         boolean frenar = false;
         
-        int fila = unaPosicion.getFila();
-        int col = unaPosicion.getCol();
+        int fila = this.inicio.getFila();
+        int col = this.inicio.getCol();
         
-        for (int i = fila+1; i < unTablero.getTablero().length && !frenar; i++) {
-            if (!unTablero.esLugarVacio(i, col)) {
+        for (int i = fila+1; i < this.tablero.getTamanio() && !frenar; i++) {
+            if (!this.tablero.esLugarVacio(i, col)) {
                 frenar = true;
-                Posicion actual = new Posicion(i, col, unTablero);
-                if (puedeComer(unaPosicion, actual, unTablero)) {
+                Posicion actual = new Posicion(i, col);
+                if (puedeComer(actual)) {
                     posiciones.add(actual);
                 }
             }
@@ -49,10 +54,10 @@ public class ListaPosConCaptura {
         frenar = true;
         
         for (int i = fila-1; i >= 0&& !frenar; i--) {
-            if (!unTablero.esLugarVacio(i, col)) {
+            if (!this.tablero.esLugarVacio(i, col)) {
                 frenar = true;
-                Posicion actual = new Posicion(i, col, unTablero);
-                if (puedeComer(unaPosicion, actual, unTablero)) {
+                Posicion actual = new Posicion(i, col);
+                if (puedeComer(actual)) {
                     posiciones.add(actual);
                 }
             }
@@ -61,29 +66,31 @@ public class ListaPosConCaptura {
         return posiciones;
     }
     
-    private ArrayList<Posicion> listarPosVertical(Posicion unaPosicion, Tablero unTablero) {
+    private ArrayList<Posicion> listarPosVertical() {
         ArrayList<Posicion> posiciones = new ArrayList<Posicion>();
                 
         boolean frenar = false;
         
-        int fila = unaPosicion.getFila();
-        int col = unaPosicion.getCol();
+        int fila = this.inicio.getFila();
+        int col = this.inicio.getCol();
         
-        for (int j = col+1; j < unTablero.getTablero()[0].length && !frenar; j++) {
-            if (!unTablero.esLugarVacio(fila, j)) {
+        for (int j = col+1; j < this.tablero.getTamanio() && !frenar; j++) {
+            if (!this.tablero.esLugarVacio(fila, j)) {
                 frenar = true;
-                Posicion actual = new Posicion(fila, j, unTablero);
-                if (puedeComer(unaPosicion, actual, unTablero)) {
+                Posicion actual = new Posicion(fila, j);
+                if (puedeComer(actual)) {
                     posiciones.add(actual);
                 }
             }
         }
+        
+        frenar = false;
         
         for (int j = col-1; j >= 0 && !frenar; j--) {
-            if (!unTablero.esLugarVacio(fila, j)) {
+            if (!this.tablero.esLugarVacio(fila, j)) {
                 frenar = true;
-                Posicion actual = new Posicion(fila, j, unTablero);
-                if (puedeComer(unaPosicion, actual, unTablero)) {
+                Posicion actual = new Posicion(fila, j);
+                if (puedeComer(actual)) {
                     posiciones.add(actual);
                 }
             }
@@ -92,20 +99,20 @@ public class ListaPosConCaptura {
         return posiciones;
     }
     
-    private ArrayList<Posicion> listarPosDiagonal(Posicion unaPosicion, Tablero unTablero) {
+    private ArrayList<Posicion> listarPosDiagonal() {
         ArrayList<Posicion> posiciones = new ArrayList<Posicion>();
                 
         boolean frenar = false;
         
-        int fila = unaPosicion.getFila();
-        int col = unaPosicion.getCol();
+        int fila = this.inicio.getFila();
+        int col = this.inicio.getCol();
         
         //DE IZQ A DERECHA CRECIENTE
-        for (int i = fila-1, j = col+1; i >= 0 && j < unTablero.getTamanio() && !frenar; i--, j++) {
-            if (!unTablero.esLugarVacio(i, j)) {
+        for (int i = fila-1, j = col+1; i >= 0 && j < this.tablero.getTamanio() && !frenar; i--, j++) {
+            if (!this.tablero.esLugarVacio(i, j)) {
                 frenar = true;
-                Posicion actual = new Posicion(i, j, unTablero);
-                if (puedeComer(unaPosicion, actual, unTablero)) {
+                Posicion actual = new Posicion(i, j);
+                if (puedeComer(actual)) {
                     posiciones.add(actual);
                 }
             }
@@ -114,11 +121,11 @@ public class ListaPosConCaptura {
         frenar = false;
         
         //DE IZQ A DER DECRECIENTE
-        for (int i = fila+1, j = col+1; i < unTablero.getTamanio() && j < unTablero.getTamanio() && !frenar; i++, j++) {
-            if (!unTablero.esLugarVacio(i, j)) {
+        for (int i = fila+1, j = col+1; i < this.tablero.getTamanio() && j < this.tablero.getTamanio() && !frenar; i++, j++) {
+            if (!this.tablero.esLugarVacio(i, j)) {
                 frenar = true;
-                Posicion actual = new Posicion(i, j, unTablero);
-                if (puedeComer(unaPosicion, actual, unTablero)) {
+                Posicion actual = new Posicion(i, j);
+                if (puedeComer(actual)) {
                     posiciones.add(actual);
                 }
             }
@@ -128,10 +135,10 @@ public class ListaPosConCaptura {
         
         //DE DER A IZQ CRECIENTE
         for (int i = fila-1, j = col-1; i >= 0 && j >= 0 && !frenar; i--, j--) {
-            if (!unTablero.esLugarVacio(i, j)) {
+            if (!this.tablero.esLugarVacio(i, j)) {
                 frenar = true;
-                Posicion actual = new Posicion(i, j, unTablero);
-                if (puedeComer(unaPosicion, actual, unTablero)) {
+                Posicion actual = new Posicion(i, j);
+                if (puedeComer(actual)) {
                     posiciones.add(actual);
                 }
             }
@@ -140,11 +147,11 @@ public class ListaPosConCaptura {
         frenar = false;
         
         //DE DER A IZQ DECRECIENTE
-        for (int i = fila+1, j = col-1; i < unTablero.getTamanio() && j >= 0 && !frenar; i++, j--) {
-            if (!unTablero.esLugarVacio(i, j)) {
+        for (int i = fila+1, j = col-1; i < this.tablero.getTamanio() && j >= 0 && !frenar; i++, j--) {
+            if (!this.tablero.esLugarVacio(i, j)) {
                 frenar = true;
-                Posicion actual = new Posicion(i, j, unTablero);
-                if (puedeComer(unaPosicion, actual, unTablero)) {
+                Posicion actual = new Posicion(i, j);
+                if (puedeComer(actual)) {
                     posiciones.add(actual);
                 }
             }
@@ -153,32 +160,17 @@ public class ListaPosConCaptura {
         return posiciones;
     }
     
-    
-    public boolean puedeComer(Posicion inicio, Posicion fin, Tablero unTablero) {
+    protected boolean puedeComer(Posicion fin) {
         boolean valida = false;
         
-        if (inicio.getFichaEnPos(unTablero) == 'R') {
-            valida = fin.getFichaEnPos(unTablero) == 'A' && 
+        if (inicio.getFichaEnPos(this.tablero) == 'R') {
+            valida = fin.getFichaEnPos(this.tablero) == 'A' && 
                     inicio.getDistanciaAlCentro() >= fin.getDistanciaAlCentro();
-        } else if (inicio.getFichaEnPos(unTablero) == 'A') {
-            valida = fin.getFichaEnPos(unTablero) == 'R' && 
+        } else if (inicio.getFichaEnPos(this.tablero) == 'A') {
+            valida = fin.getFichaEnPos(this.tablero) == 'R' && 
                     inicio.getDistanciaAlCentro() >= fin.getDistanciaAlCentro();
         }
         
         return valida;
-    }
-
-    
-    @Override 
-    public String toString() {
-        String lista = "";
-        
-        for (int i = 0; i < this.lista.size(); i++) {
-            Posicion elem = this.lista.get(i);
-            lista += elem.getFila() + "-" + elem.getCol() + " | ";
-        }
-        
-        return lista;
-    }
-    
+    } 
 }
