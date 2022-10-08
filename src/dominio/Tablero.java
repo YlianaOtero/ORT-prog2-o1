@@ -97,7 +97,7 @@ public class Tablero {
     }
 
     public int getTamanio() {
-        return this.Tamanio;
+        return Tablero.Tamanio;
     }
 
     public char getFicha(int fila, int col) {
