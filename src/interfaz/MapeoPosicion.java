@@ -1,22 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+/*MapeoPosicion define la correspondencia entre una posicion del estilo 
+* "LETRANUMERO" y las correspondientes filas y columnas del tablero.
+* LETRA esta entre la A y la F, y NUMERO entre el 1 y el 5.*/
 package interfaz;
 
 /**
  *
  * @author ylian
  */
-
-/*Define la correspondencia entre una posicion del estilo "LETRANUMERO" y 
-las correspondientes filas y columnas del tablero.
-LETRA esta entre la A y la F, y NUMERO entre el 1 y el 5.*/
 public class MapeoPosicion {
+    
     private String posicion;
     private int fila;
     private int col;
     
+    /*CONSTRUCTORES*/
     public MapeoPosicion(String unaPosicion) {
         unaPosicion = unaPosicion.toUpperCase();
         this.posicion = unaPosicion;
@@ -24,19 +21,14 @@ public class MapeoPosicion {
         this.col = colCorrespondiente(unaPosicion);
     } 
     
-    public String getPosicion() {
-        return this.posicion;
-    }
+    public MapeoPosicion(int fila, int col) {
+        this.posicion = posCorrespondiente(fila, col);
+        this.fila = fila;
+        this.col = col;
+    } 
     
-    public int getFila() {
-        return this.fila;
-    }
-    
-    public int getCol() {
-        return this.col;
-    }
-    
-    public int filaCorrespondiente(String posicion) {
+    /*METODOS AUXILIARES*/
+    private int filaCorrespondiente(String posicion) {
         char fila = posicion.charAt(0);
         int correspondiente;
         
@@ -63,7 +55,7 @@ public class MapeoPosicion {
         return correspondiente;
     }
     
-    public int colCorrespondiente(String posicion) {
+    private int colCorrespondiente(String posicion) {
         posicion = posicion.toUpperCase();
         char col = posicion.charAt(1);
         int correspondiente = Character.getNumericValue(col) - 1;
@@ -97,6 +89,18 @@ public class MapeoPosicion {
         posicion += (col+1);
         
         return posicion;
-        
+    }
+    
+    /*METODOS DE ACCESO*/
+    public String getPosicion() {
+        return this.posicion;
+    }
+    
+    public int getFila() {
+        return this.fila;
+    }
+    
+    public int getCol() {
+        return this.col;
     }
 }
