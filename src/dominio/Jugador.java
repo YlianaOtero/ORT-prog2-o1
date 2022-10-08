@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+/* Perfil del jugador.*/
 package dominio;
 
-import java.util.ArrayList;
 
 /**
  *
@@ -16,15 +12,14 @@ public class Jugador {
     private int edad;
     private String alias;
     
-    
- public Jugador(String unNombre, int unaEdad, String unAlias){
+    /*CONSTRUCTORES*/
+    public Jugador(String unNombre, int unaEdad, String unAlias){
         this.setNombre(unNombre);
         this.setEdad(unaEdad);
         this.setAlias(unAlias);
-}
+    }
 
-
-    //Metodos de acceso
+    /*METODOS DE ACCESO*/
     public String getNombre(){
         return this.nombre;
     }
@@ -37,7 +32,7 @@ public class Jugador {
         return this.alias;
     }
     
-    //Metodos de modificacion
+    /*METODOS DE MODIFICACION*/
     public void setNombre(String unNombre){
         this.nombre = unNombre;
     }
@@ -49,21 +44,10 @@ public class Jugador {
     public void setAlias(String unAlias){
         this.alias = unAlias;
     }
-    
-    
-    public boolean tienenMismoAlias(Jugador unJ, ListaJugadores lista){
-       
-        for (int i=0; i < lista.size(); i++) {
-            return (this.getAlias().equals(lista.jugadorAt(i).getAlias()));
-           
-        }
-    } 
-    
-    
 
- @Override
+    /*OVERRIDES*/
+    @Override
     public String toString(){
-        return this.getNombre() + "-" + this.getEdad() + this.getAlias();
+        return this.getNombre() + "         " + this.getAlias() + "          " + this.getEdad();
     }
-    
 }
