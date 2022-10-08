@@ -23,6 +23,16 @@ public class ListaPosConCaptura {
         this.lista = listarPosiciones();
     }
     
+    /*METODOS DE ACCESO*/
+    public ArrayList<Posicion> getLista() {
+        return this.lista;
+    }
+    
+    /*PREDICADOS*/
+    public boolean hayMovimientos() {
+        return !this.lista.isEmpty();
+    }
+    
     /*METODOS DE MODIFICACION*/
     private ArrayList<Posicion> listarPosiciones() {
         ArrayList<Posicion> posiciones = listarPosHorizontal();
