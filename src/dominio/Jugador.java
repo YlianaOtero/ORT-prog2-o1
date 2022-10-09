@@ -11,12 +11,16 @@ public class Jugador {
     private String nombre;
     private int edad;
     private String alias;
+    private int partidas;
+    private int victorias;
     
     /*CONSTRUCTORES*/
-    public Jugador(String unNombre, int unaEdad, String unAlias){
+    public Jugador(String unNombre, int unaEdad, String unAlias, int unaPartida, int unaVictoria){
         this.setNombre(unNombre);
         this.setEdad(unaEdad);
         this.setAlias(unAlias);
+        this.setPartidas(unaPartida);
+        this.setVictorias(unaVictoria);
     }
 
     /*METODOS DE ACCESO*/
@@ -32,6 +36,14 @@ public class Jugador {
         return this.alias;
     }
     
+    public int getPartidas(){
+        return this.partidas;
+    }
+    
+    public int getVictorias(){
+        return this.victorias;
+    }
+    
     /*METODOS DE MODIFICACION*/
     public void setNombre(String unNombre){
         this.nombre = unNombre;
@@ -43,6 +55,14 @@ public class Jugador {
 
     public void setAlias(String unAlias){
         this.alias = unAlias;
+    }
+    
+    public void setPartidas(int unaPartida){
+        this.partidas= unaPartida;
+    }
+    
+    public void setVictorias(int unaVictoria){
+        this.victorias=unaVictoria;
     }
 
     /*OVERRIDES*/
