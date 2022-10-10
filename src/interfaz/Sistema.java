@@ -3,10 +3,7 @@ package interfaz;
 
 import dominio.Jugador;
 import dominio.ListaJugadores;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-import java.util.regex.Pattern;
-
+import dominio.Ranking;
 /**
  *
  * @author ylian
@@ -33,7 +30,7 @@ public class Sistema {
                 + "Escribe una de las opciones:\n"
                 + "********************************\n");
 
-        char opcion = leerOpcionMenu('a', 'e');
+        char opcion = Lectura.leerOpcionMenu('a', 'e');
         opciones(opcion);
     }
 
@@ -73,9 +70,7 @@ public class Sistema {
                 + "b. No. \n"
                 + "********************************\n");
 
-        Scanner in = new Scanner(System.in);
-
-        char opcion = leerOpcionMenu('a', 'b');
+        char opcion = Lectura.leerOpcionMenu('a', 'b');
 
         switch (opcion) {
             case 'a' ->
@@ -108,17 +103,12 @@ public class Sistema {
 
     private static void verRanking() {
         //MOSTRAR RANKING
-        Ranking ranking= new Ranking(this.listaJugadores);
-        system.out.println(ranking);
-
+        Ranking ranking = new Ranking(Jugadores);
+        System.out.println(ranking);
     }
 
     //PETICIONES AL USUARIO
     private static String pedirTipoTablero() {
-        Scanner in = new Scanner(System.in);
-
-        String tipo = "";
-
         System.out.println("Ingrese el tablero a usar: \n"
                 + "a. Standard\n"
                 + "b. Precargado 1\n"
@@ -126,9 +116,9 @@ public class Sistema {
                 + "Elija una de las opciones.\n"
                 + "********************************\n");
 
-        char opcion = leerOpcionMenu('a', 'c');
+        char opcion = Lectura.leerOpcionMenu('a', 'c');
 
-        tipo = switch (opcion) {
+        String tipo = switch (opcion) {
             case 'b' ->
                 "Precargado 1";
             case 'c' ->
@@ -144,13 +134,13 @@ public class Sistema {
         String[] datos = new String[3];
 
         System.out.println("Ingrese nombre del jugador:");
-        datos[0] = leerNombreJugador();
+        datos[0] = Lectura.leerNombreJugador();
 
         System.out.println("Ingrese edad del jugador:");
-        datos[1] = String.valueOf(leerEdadJugador());
+        datos[1] = String.valueOf(Lectura.leerEdadJugador());
 
         System.out.println("Ingrese alias del jugador:");
-        datos[2] = leerAliasJugador();
+        datos[2] = Lectura.leerAliasJugador(Jugadores);
 
         return datos;
     }
@@ -161,12 +151,12 @@ public class Sistema {
         mostrarListaJugadores();
 
         System.out.println("Elija al jugador 1:");
-        jugadores[0] = Jugadores.jugadorAt(leerOpcionJugadores(Jugadores.size()) - 1);
+        jugadores[0] = Jugadores.jugadorAt(Lectura.leerOpcionJugadores(Jugadores.size()) - 1);
 
         boolean repetido = true;
         System.out.println("Elija al jugador 2:");
         while (repetido) {
-            jugadores[1] = Jugadores.jugadorAt(leerOpcionJugadores(Jugadores.size()) - 1);
+            jugadores[1] = Jugadores.jugadorAt(Lectura.leerOpcionJugadores(Jugadores.size()) - 1);
             if (jugadores[1].getAlias().equals(jugadores[0].getAlias())) {
                 System.out.println("Debe elegir dos jugadores diferentes. Ingrese otra opcion:");
             } else {
@@ -183,142 +173,5 @@ public class Sistema {
                 + "   Nombre            Alias           Edad");
         System.out.println(Jugadores);
         System.out.println("********************************");
-    }
-
-    //LECTURA POR PANTALLA Y MANEJO DE EXCEPCIONES
-    private static char leerOpcionMenu(char min, char max) {
-        Scanner in = new Scanner(System.in);
-
-        String txtErrorRango = "Debe ingresar una letra entre " + min + " y " + max + ". \n"
-                + "Por favor ingrese un valor correcto: ";
-
-        char opcion = 0;
-        boolean opcionInvalida = true;
-
-        while (opcionInvalida) {
-            try {
-                String strOpcion = in.nextLine();
-                opcion = Character.toLowerCase(strOpcion.charAt(0));
-
-                if (opcion <= max && opcion >= min && strOpcion.length() == 1) {
-                    opcionInvalida = false;
-                } else {
-                    System.out.println(txtErrorRango);
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Debe ingresar una letra. \n"
-                        + "Por favor ingrese un valor correcto: ");
-                in.nextLine();
-            }
-        }
-        return opcion;
-    }
-
-    private static String leerNombreJugador() {
-        Scanner in = new Scanner(System.in);
-
-        String txtErrorCaracteres = "El nombre puede incluir unicamente letras de la A a la Z. \n"
-                + "Por favor ingrese un nombre correcto: ";
-
-        String opcion = "";
-        boolean opcionInvalida = true;
-
-        while (opcionInvalida) {
-            try {
-                opcion = in.nextLine();
-                if (!Pattern.matches("[a-zA-Z]+", opcion)) {
-                    System.out.println(txtErrorCaracteres);
-                } else {
-                    opcionInvalida = false;
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Por favor, ingrese un nombre valido: \n");
-                in.nextLine();
-            }
-        }
-        return opcion;
-    }
-
-    private static String leerAliasJugador() {
-        Scanner in = new Scanner(System.in);
-
-        String txtErrorCaracteres = "El alias puede incluir unicamente letras minusculas de la A a la Z. \n"
-                + "Por favor ingrese un alias correcto: ";
-        String txtErrorAliasExistente = "El alias ya esta en uso. \n"
-                + "Por favor ingrese un alias que este disponible:";
-
-        String opcion = "";
-        boolean opcionInvalida = true;
-
-        while (opcionInvalida) {
-            try {
-                opcion = in.nextLine();
-                if (!Pattern.matches("[a-z]+", opcion)) {
-                    System.out.println(txtErrorCaracteres);
-                } else if (Jugadores.existeAlias(opcion)) {
-                    System.out.println(txtErrorAliasExistente);
-                } else {
-                    opcionInvalida = false;
-                }
-            } catch (InputMismatchException e) {
-                System.out.println(txtErrorCaracteres);
-                in.nextLine();
-            }
-        }
-        return opcion;
-    }
-
-    private static int leerEdadJugador() {
-        Scanner in = new Scanner(System.in);
-
-        String txtErrorRango = "Debe ingresar un entero entre 1 y 100. \n"
-                + "Por favor ingrese un valor correcto: ";
-
-        int opcion = 0;
-        boolean opcionInvalida = true;
-
-        while (opcionInvalida) {
-            try {
-                opcion = in.nextInt();
-
-                if (opcion <= 100 && opcion >= 1) {
-                    opcionInvalida = false;
-                } else {
-                    System.out.println(txtErrorRango);
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Debe ingresar un numero natural. \n"
-                        + "Por favor ingrese un valor correcto: ");
-                in.nextLine();
-            }
-        }
-        return opcion;
-    }
-
-    private static int leerOpcionJugadores(int max) {
-        Scanner in = new Scanner(System.in);
-
-        String txtErrorRango = "Debe ingresar un entero entre 1 y " + max + ". \n"
-                + "Por favor ingrese un valor correcto: ";
-
-        int opcion = 0;
-        boolean opcionInvalida = true;
-
-        while (opcionInvalida) {
-            try {
-                opcion = in.nextInt();
-
-                if (opcion <= max && opcion >= 1) {
-                    opcionInvalida = false;
-                } else {
-                    System.out.println(txtErrorRango);
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Debe ingresar un numero entero. \n"
-                        + "Por favor ingrese un valor correcto: ");
-                in.nextLine();
-            }
-        }
-        return opcion;
     }
 }
