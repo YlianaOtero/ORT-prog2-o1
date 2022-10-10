@@ -12,6 +12,7 @@ public class Color {
     private String codigo;
     private String nombre;
 
+    private static String Reset = "\u001B[0m";
     private static String Negro = "\u001B[30m";
     private static String Rojo = "\u001B[31m";
     private static String Azul = "\u001B[34m";
@@ -19,11 +20,28 @@ public class Color {
 
     /*CONSTRUCTORES*/
     public Color() {
-        this.codigo = Negro;
-        this.nombre = "negro";
+        this.codigo = Reset;
+        this.nombre = "";
+    }
+    
+    public Color (char letra) {
+        switch (letra) {
+            case 'A' -> {
+               this.codigo = Azul;
+                this.nombre = "azul"; 
+            }
+            case 'R' -> {
+                this.codigo = Rojo;
+                this.nombre = "rojo";
+            }
+            default -> {
+                this.codigo = Verde;
+                this.nombre = "verde";
+            }
+        }
     }
 
-    /*METODOS DE MODIFICACION*/
+    /*METODOS DE ACCESO*/
     public String getCodigo() {
         return this.codigo;
     }
@@ -32,7 +50,7 @@ public class Color {
         return this.nombre;
     }
     
-    /*METODOS DE ACCESO*/
+    /*METODOS DE MODIFICACION*/
     public void setColor(String unColor) {
         if (unColor.equalsIgnoreCase("rojo")) {
             this.codigo = Rojo;
@@ -47,5 +65,10 @@ public class Color {
             this.codigo = Negro;
             this.nombre = "negro";
         }
+    }
+
+    public String letraPintada(char letra) {
+        String codigo = this.getCodigo();
+        return codigo + letra;
     }
 }
