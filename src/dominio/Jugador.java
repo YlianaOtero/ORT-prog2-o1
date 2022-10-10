@@ -15,12 +15,12 @@ public class Jugador {
     private int victorias;
     
     /*CONSTRUCTORES*/
-    public Jugador(String unNombre, int unaEdad, String unAlias, int unaPartida, int unaVictoria){
+    public Jugador(String unNombre, int unaEdad, String unAlias){
         this.setNombre(unNombre);
         this.setEdad(unaEdad);
         this.setAlias(unAlias);
-        this.setPartidas(unaPartida);
-        this.setVictorias(unaVictoria);
+        this.partidas = 0;
+        this.victorias = 0;
     }
 
     /*METODOS DE ACCESO*/
@@ -64,14 +64,15 @@ public class Jugador {
     public void setVictorias(int unaVictoria){
         this.victorias=unaVictoria;
     }
-
-    /*OVERRIDES*/
+    
     @Override
     public String toString(){
         return this.getNombre() + "         " + this.getAlias() + "          " + this.getEdad();
     }
+
+    /* TO DO: ARREGLAR ESTO
      @Override
      public int compareTo(Jugador j){
         return j.getVictorias().compareTo(this.getVictorias)
-     }
+     }*/
 }
