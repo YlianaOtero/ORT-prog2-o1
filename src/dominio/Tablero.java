@@ -104,8 +104,8 @@ public class Tablero {
         return this.tablero[fila][col];
     }
 
-    /*METODOS DE MODIFICACION*/
-    public void desplazarFicha(int filaInicial, int colInicial, int filaFinal, int colFinal) {
+    /*METODOS DE MODIFICACION VIEJOS*/
+    /*public void desplazarFicha(int filaInicial, int colInicial, int filaFinal, int colFinal) {
         char ficha = this.tablero[filaInicial][filaFinal];
         this.tablero[filaFinal][colFinal] = ficha;
         this.tablero[filaInicial][colInicial] = ' ';
@@ -119,6 +119,25 @@ public class Tablero {
     public void comerFichaRoja(int fila, int col) {
         this.tablero[fila][col] = 'A';
         cantFichasAzules--;
+    }*/
+    
+    /*METODOS DE MODIFICACION*/
+    public void desplazarFicha(int filaInicial, int colInicial, int filaFinal, int colFinal) {
+        char ficha = this.tablero[filaInicial][filaFinal];
+        this.tablero[filaFinal][colFinal] = ficha;
+        this.tablero[filaInicial][colInicial] = ' ';
+    }
+    
+    public void comerFicha(int filaInicial, int colInicial, int filaFinal, int colFinal) {
+        if (this.tablero[filaInicial][colInicial] == 'A') {
+            this.tablero[filaFinal][colFinal] = 'R';
+            this.tablero[filaInicial][colInicial] = ' ';
+            cantFichasAzules--;
+        } else if (this.tablero[filaInicial][colInicial] == 'R') {
+            this.tablero[filaFinal][colFinal] = 'A';
+            this.tablero[filaInicial][colInicial] = ' ';
+            cantFichasRojas--;
+        }
     }
 
     /*PREDICADOS*/
