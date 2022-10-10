@@ -33,6 +33,19 @@ public class ListaPosConCaptura {
         return !this.lista.isEmpty();
     }
     
+    public boolean estaEnLaLista(Posicion pos) {
+        boolean esta = false;
+        
+        for (int i = 0; i < this.lista.size() && !esta; i++) {
+            Posicion actual = this.lista.get(i);
+            if (actual.getFila() == pos.getFila() && actual.getCol() == pos.getCol()) {
+                esta = true;
+            }
+        }
+        
+        return esta;
+    }
+    
     /*METODOS DE MODIFICACION*/
     private ArrayList<Posicion> listarPosiciones() {
         ArrayList<Posicion> posiciones = listarPosHorizontal();
