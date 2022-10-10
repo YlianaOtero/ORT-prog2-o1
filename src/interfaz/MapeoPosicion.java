@@ -3,6 +3,8 @@
 * LETRA esta entre la A y la F, y NUMERO entre el 1 y el 5.*/
 package interfaz;
 
+import dominio.Posicion;
+
 /**
  *
  * @author ylian
@@ -92,8 +94,13 @@ public class MapeoPosicion {
     }
     
     /*METODOS DE ACCESO*/
-    public String getPosicion() {
+    public String getPosicionString() {
         return this.posicion;
+    }
+    
+    public Posicion getPosicion() {
+        Posicion pos = new Posicion(this.fila, this.col);
+        return pos;
     }
     
     public int getFila() {
