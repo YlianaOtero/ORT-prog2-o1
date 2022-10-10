@@ -70,4 +70,8 @@ public class Jugador {
     public String toString(){
         return this.getNombre() + "         " + this.getAlias() + "          " + this.getEdad();
     }
+     @Override
+     public int compareTo(Jugador j){
+        return j.getVictorias().compareTo(this.getVictorias)
+     }
 }
