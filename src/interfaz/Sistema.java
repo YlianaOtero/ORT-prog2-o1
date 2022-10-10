@@ -108,6 +108,9 @@ public class Sistema {
 
     private static void verRanking() {
         //MOSTRAR RANKING
+        Ranking ranking= new Ranking(this.listaJugadores);
+        system.out.println(ranking);
+
     }
 
     //PETICIONES AL USUARIO
