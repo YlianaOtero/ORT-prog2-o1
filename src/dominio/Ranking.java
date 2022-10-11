@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package ranking;
+package dominio;
 
 /**
  *
@@ -17,13 +17,13 @@ public class Ranking{
         }
         
         /*METODOS DE ACCESO*/
-         public String getListaJugadores(){
-        return this.listaJugadores;
+        public String getListaJugadores(){
+                return this.listaJugadores;
         }
         
         /*METODOS DE MODIFICACION*/
         public void setListaJugadores(ListaJugadores unaListaJugadores){
-        this.listaJugadores = unaListaJugadores;
+                this.listaJugadores = unaListaJugadores;
         }
         
          /*OVERRIDES*/
@@ -39,5 +39,3 @@ public class Ranking{
           }
 
     }
-    
-
