@@ -12,8 +12,8 @@ public class Ranking{
         private ListaJugadores listaJugadores;
         /*CONSTRUCTORES*/
         public Ranking(ListaJugadores unaListaJugadores){
-            this.setListaJugadores= unaListaJugadores;
-            Collection.sort(listaJugadores);
+            unaListaJugadores.ordenarLista();    
+            this.setListaJugadores = unaListaJugadores;
         }
         
         /*METODOS DE ACCESO*/
@@ -26,8 +26,6 @@ public class Ranking{
         this.listaJugadores = unaListaJugadores;
         }
         
-        
-        
          /*OVERRIDES*/
           @Override
           public String toString(){
@@ -39,9 +37,6 @@ public class Ranking{
             }
             return jugadores;
           }
-     
-        
-        
 
     }
     
