@@ -56,18 +56,30 @@ public class ListaPosSinCaptura {
     }
 
     /*METODOS AUXILIARES*/
+    protected boolean puedeDesplazarse(Posicion fin) {
+        return fin.getFichaEnPos(this.tablero) == ' ' && 
+                    inicio.getDistanciaAlCentro() < fin.getDistanciaAlCentro();
+    } 
+    
+    
     private ArrayList<Posicion> listarPosHorizontal() {
         int fila = this.inicio.getFila();
         int col = this.inicio.getCol();
 
         ArrayList<Posicion> posiciones = new ArrayList<Posicion>();
 
-        if (col > 0 && this.tablero.esLugarVacio(fila, col - 1)) {
-            enlistar(fila, col - 1, posiciones);
+        if (col > 0) {
+            Posicion nueva = new Posicion(fila, col - 1);
+            if (puedeDesplazarse (nueva)) {
+                posiciones.add(nueva);
+            } 
         }
 
-        if (col < this.tablero.getTamanio() - 1 && this.tablero.esLugarVacio(fila, col + 1)) {
-            enlistar(fila, col + 1, posiciones);
+        if (col < this.tablero.getTamanio() - 1) {
+            Posicion nueva = new Posicion(fila, col + 1);
+            if (puedeDesplazarse (nueva)) {
+                posiciones.add(nueva);
+            }
         }
 
         return posiciones;
@@ -79,11 +91,18 @@ public class ListaPosSinCaptura {
 
         ArrayList<Posicion> posiciones = new ArrayList<Posicion>();
 
-        if (fila > 0 && this.tablero.esLugarVacio(fila - 1, col)) {
-            enlistar(fila - 1, col, posiciones);
+        if (fila > 0) {
+            Posicion nueva = new Posicion(fila - 1, col);
+            if (puedeDesplazarse (nueva)) {
+                posiciones.add(nueva);
+            }
         }
-        if (fila < this.tablero.getTamanio() - 1 && this.tablero.esLugarVacio(fila + 1, col)) {
-            enlistar(fila + 1, col, posiciones);
+        
+        if (fila < this.tablero.getTamanio() - 1) {
+            Posicion nueva = new Posicion(fila + 1, col);
+            if (puedeDesplazarse (nueva)) {
+                posiciones.add(nueva);
+            }
         }
 
         return posiciones;
@@ -96,28 +115,35 @@ public class ListaPosSinCaptura {
         ArrayList<Posicion> posiciones = new ArrayList<Posicion>();
 
         if (fila > 0) {
-            if (col > 0 && this.tablero.esLugarVacio(fila - 1, col - 1)) {
-                enlistar(fila - 1, col - 1, posiciones);
+            if (col > 0) {
+                Posicion nueva = new Posicion(fila - 1, col - 1);
+                if (puedeDesplazarse (nueva)) {
+                    posiciones.add(nueva);
+                }
             }
-            if (col < this.tablero.getTamanio() - 1 && this.tablero.esLugarVacio(fila - 1, col + 1)) {
-                enlistar(fila - 1, col + 1, posiciones);
+            if (col < this.tablero.getTamanio() - 1) {
+                Posicion nueva = new Posicion(fila - 1, col + 1);
+                if (puedeDesplazarse (nueva)) {
+                    posiciones.add(nueva);
+                }
             }
         }
 
         if (fila < this.tablero.getTamanio() - 1) {
-            if (col > 0 && this.tablero.esLugarVacio(fila + 1, col - 1)) {
-                enlistar(fila + 1, col - 1, posiciones);
+            if (col > 0) {
+                Posicion nueva = new Posicion(fila + 1, col - 1);
+                if (puedeDesplazarse (nueva)) {
+                    posiciones.add(nueva);
+                }
             }
-            if (col < this.tablero.getTamanio() - 1 && this.tablero.esLugarVacio(fila + 1, col + 1)) {
-                enlistar(fila + 1, col + 1, posiciones);
+            if (col < this.tablero.getTamanio() - 1) {
+                Posicion nueva = new Posicion(fila + 1, col + 1);
+                if (puedeDesplazarse (nueva)) {
+                    posiciones.add(nueva);
+                }
             }
         }
 
         return posiciones;
-    }
-    
-    private void enlistar(int fila, int col, ArrayList<Posicion> lista) {
-        Posicion nueva = new Posicion(fila, col);
-        lista.add(nueva);
     }
 }
