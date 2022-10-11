@@ -35,19 +35,18 @@ public class ListaJugadores {
     public void agregarJugador(Jugador unJugador) {
         this.listaJugadores.add(unJugador);
     }
+     public void ordenarLista() {
+        ArrayList<Jugador> aux = this.getListaJugadores();
+        Collections.sort(aux, new Comparator<Jugador>(){
+            @Override
+            public int compare(Jugador o1, Jugador o2) {
+                    int victorias1 = o1.getVictorias();
+                    int victorias2 = o2.getVictorias();
+                    return (victorias2 - victorias1);
+             }});
+        this.listaJugadores = aux;
+    }
     
-//    public void ordenarLista() {
-//        ArrayList<Jugador> aux = this.getListaJugadores();
-//        Collections.sort(aux, new Comparator<Jugador>() { //innerClass culero
-//		@Override
-//		public int compare(Jugador o1, Jugador o2) {
-//                    int victorias1 = o1.getVictorias();
-//                    int victorias2 = o2.getVictorias();
-//                    return (victorias2 - victorias1);
-//                });
-//        }
-//        this.listaJugadores = aux;
-//    }
 
     /*PREDICADOS*/
     public boolean existeAlias(String opcion) {
