@@ -1,12 +1,10 @@
-/* Tablero incluye la configuración del tablero del juego. Es la base de este,
- * pues consta de la matriz de caracteres que repersentan las fichas con las que
- * se debe jugar.*/
 package dominio;
 
-/**
- *
- * @author ylian
- */
+/** Tablero incluye la configuración del tablero del juego. Es la base de este,
+ * pues consta de la matriz de caracteres que repersentan las fichas con las que
+ * se debe jugar.
+ * @author yliana*/
+
 public class Tablero {
 
     private static int Tamanio = 6;
@@ -104,40 +102,23 @@ public class Tablero {
         return this.tablero[fila][col];
     }
 
-    /*METODOS DE MODIFICACION VIEJOS*/
-    /*public void desplazarFicha(int filaInicial, int colInicial, int filaFinal, int colFinal) {
-        char ficha = this.tablero[filaInicial][filaFinal];
-        this.tablero[filaFinal][colFinal] = ficha;
-        this.tablero[filaInicial][colInicial] = ' ';
-    }
-
-    public void comerFichaAzul(int fila, int col) {
-        this.tablero[fila][col] = 'R';
-        cantFichasRojas--;
-    }
-
-    public void comerFichaRoja(int fila, int col) {
-        this.tablero[fila][col] = 'A';
-        cantFichasAzules--;
-    }*/
-    
     /*METODOS DE MODIFICACION*/
     public void desplazarFicha(int filaInicial, int colInicial, int filaFinal, int colFinal) {
-        char ficha = this.tablero[filaInicial][filaFinal];
+        char ficha = this.tablero[filaInicial][colInicial];
         this.tablero[filaFinal][colFinal] = ficha;
         this.tablero[filaInicial][colInicial] = ' ';
     }
     
     public void comerFicha(int filaInicial, int colInicial, int filaFinal, int colFinal) {
-        if (this.tablero[filaInicial][colInicial] == 'A') {
-            this.tablero[filaFinal][colFinal] = 'R';
-            this.tablero[filaInicial][colInicial] = ' ';
-            cantFichasAzules--;
-        } else if (this.tablero[filaInicial][colInicial] == 'R') {
-            this.tablero[filaFinal][colFinal] = 'A';
-            this.tablero[filaInicial][colInicial] = ' ';
+        char fichaInicial = this.tablero[filaInicial][colInicial];
+        if (fichaInicial == 'A') {
             cantFichasRojas--;
+        } else if (fichaInicial == 'R') {
+            cantFichasAzules--;
         }
+        
+        this.tablero[filaFinal][colFinal] = fichaInicial;
+        this.tablero[filaInicial][colInicial] = ' ';
     }
 
     /*PREDICADOS*/
