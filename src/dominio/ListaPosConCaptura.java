@@ -1,25 +1,17 @@
-/*  ListaPosConCaptura se encarga de la lógica de los movimientos con captura del
- * juego. Un objeto de esta clase tiene una posición a partir de la cual se genera
- * la lista de posiciones a las cuales se podría desplazar capturando a una ficha,
- * siempre dentro de un tablero dado.*/
 package dominio;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author ylian
- */
-public class ListaPosConCaptura {
-    
-    private Posicion inicio;
-    private Tablero tablero;
+/** Partiendo de la posicion Inicio almancenada en la superclase ListaPosPosibels, 
+ * dentro del tablero incluido en la misma clase, ListaPosConCaptura se encarga 
+ * de listar las posiciones a las cuales la ficha en Inicio podria desplazarse
+ * con captura. 
+ * @author yliana */
+public class ListaPosConCaptura extends ListaPosPosibles {
     private ArrayList<Posicion> lista;
     
     /*CONSTRUCTORES*/
-    public ListaPosConCaptura(Posicion unaPosicion, Tablero unTablero) {
-        this.inicio = unaPosicion;
-        this.tablero = unTablero;
+    public ListaPosConCaptura() {
         this.lista = listarPosiciones();
     }
     
@@ -28,172 +20,119 @@ public class ListaPosConCaptura {
         return this.lista;
     }
     
-    /*PREDICADOS*/
-    public boolean hayMovimientos() {
-        return !this.lista.isEmpty();
-    }
-    
-    public boolean estaEnLaLista(Posicion pos) {
-        boolean esta = false;
-        
-        for (int i = 0; i < this.lista.size() && !esta; i++) {
-            Posicion actual = this.lista.get(i);
-            if (actual.getFila() == pos.getFila() && actual.getCol() == pos.getCol()) {
-                esta = true;
-            }
-        }
-        
-        return esta;
-    }
-    
-    /*METODOS DE MODIFICACION*/
     private ArrayList<Posicion> listarPosiciones() {
-        ArrayList<Posicion> posiciones = listarPosHorizontal();
-        posiciones.addAll(listarPosVertical());
-        posiciones.addAll(listarPosDiagonal());
+        ArrayList<Posicion> posiciones = listarPosSegunDireccion("horizontal creciente", 
+                                        incrementoEnRecorrida("horizontal creciente"));
+        
+        posiciones.addAll(listarPosSegunDireccion("horizontal decreciente", 
+                          incrementoEnRecorrida("horizontal decreciente")));
+        
+        posiciones.addAll(listarPosSegunDireccion("vertical creciente", 
+                          incrementoEnRecorrida("vertical creciente")));
+        
+        posiciones.addAll(listarPosSegunDireccion("vertical decreciente", 
+                          incrementoEnRecorrida("vertical decreciente")));
+        
+        posiciones.addAll(listarPosSegunDireccion("izquierda derecha creciente", 
+                          incrementoEnRecorrida("izquierda derecha creciente")));
+
+        posiciones.addAll(listarPosSegunDireccion("izquierda derecha decreciente", 
+                          incrementoEnRecorrida("izquierda derecha decreciente")));
+        
+        posiciones.addAll(listarPosSegunDireccion("derecha izquierda creciente", 
+                          incrementoEnRecorrida("derecha izquierda creciente")));
+        
+        posiciones.addAll(listarPosSegunDireccion("derecha izquierda decreciente", 
+                          incrementoEnRecorrida("derecha izquierda decreciente")));
         
         return posiciones;
     }
 
-    /*METODOS AUXILIARES*/
-    private ArrayList<Posicion> listarPosHorizontal() {
+    /** Lista todas las posiciones con captura posibles, segun una direccion especifica.
+     * @param direccion Representa la direccion en la cual se buscaran las posiciones.
+     * @param  incrementoRecorrida Es un arreglo de enteros. El primer elemento
+     * representa el factor de cambio o incremento de la fila al recorrer, mientras
+     * que el segundo, el de la columna.
+     * @return Devuelve la lista con dichas posiciones.*/
+    private ArrayList<Posicion> listarPosSegunDireccion(String direccion, 
+                                             int[] incrementoRecorrida) {
         ArrayList<Posicion> posiciones = new ArrayList<Posicion>();
-                
+  
+        int fila = super.Inicio.getFila() + incrementoRecorrida[0];
+        int col = super.Inicio.getCol() + incrementoRecorrida[1];
+        
         boolean frenar = false;
         
-        int fila = this.inicio.getFila();
-        int col = this.inicio.getCol();
-        
-        for (int i = fila+1; i < this.tablero.getTamanio() && !frenar; i++) {
-            if (!this.tablero.esLugarVacio(i, col)) {
+        while (continuaRecorrida(direccion, fila, col) && !frenar) {
+            if (!super.Tablero.esLugarVacio(fila, col)) {
                 frenar = true;
-                Posicion actual = new Posicion(i, col);
-                if (puedeComer(actual)) {
+                Posicion actual = new Posicion(fila, col);
+                if (Posicion.puedeComer(super.Inicio, actual, super.Tablero)) {
                     posiciones.add(actual);
                 }
             }
-        }
-        
-        frenar = true;
-        
-        for (int i = fila-1; i >= 0&& !frenar; i--) {
-            if (!this.tablero.esLugarVacio(i, col)) {
-                frenar = true;
-                Posicion actual = new Posicion(i, col);
-                if (puedeComer(actual)) {
-                    posiciones.add(actual);
-                }
-            }
+            fila = fila + incrementoRecorrida[0];
+            col = col + incrementoRecorrida[1];
         }
         
         return posiciones;
     }
     
-    private ArrayList<Posicion> listarPosVertical() {
-        ArrayList<Posicion> posiciones = new ArrayList<Posicion>();
-                
-        boolean frenar = false;
+    /**Es un metodo auxiliar de listarPosSegunDireccion.
+     * Controla que las variables de recorrida del while no se vayan del rango
+     * del tablero, y esto depende de en qué dirección se está recorriendo este.
+     * @param direccion Representa la direccion en la cual se buscaran las posiciones.
+     * @param fila Fila sobre la cual se comenzara a recorrer.
+     * @param col Columna sobre la cual se comenzara a recorrer.
+     * @return Devuelve true en caso de que sea posible seguir recorriendo el tablero
+     * en dicha direccion, y false en caso contrario.*/
+    private boolean continuaRecorrida(String direccion, int fila, int col) {
+        boolean resultado = false;
         
-        int fila = this.inicio.getFila();
-        int col = this.inicio.getCol();
-        
-        for (int j = col+1; j < this.tablero.getTamanio() && !frenar; j++) {
-            if (!this.tablero.esLugarVacio(fila, j)) {
-                frenar = true;
-                Posicion actual = new Posicion(fila, j);
-                if (puedeComer(actual)) {
-                    posiciones.add(actual);
-                }
-            }
+        switch (direccion) {
+            case "vertical creciente" -> resultado = col < super.Tablero.getTamanio();
+            case "vertical decreciente" -> resultado = col > 0;
+            case "horizontal creciente" -> resultado = fila < super.Tablero.getTamanio();
+            case "horizontal decreciente" -> resultado = fila > 0;
+            case "izquierda derecha creciente" -> resultado = fila >= 0 && col < super.Tablero.getTamanio();
+            case "izquierda derecha decreciente" -> resultado = fila < super.Tablero.getTamanio() && col < super.Tablero.getTamanio();
+            case "derecha izquierda creciente" -> resultado = fila >= 0 && col >= 0;
+            case "derecha izquierda decreciente" -> resultado = fila < super.Tablero.getTamanio() && col >= 0;
         }
         
-        frenar = false;
-        
-        for (int j = col-1; j >= 0 && !frenar; j--) {
-            if (!this.tablero.esLugarVacio(fila, j)) {
-                frenar = true;
-                Posicion actual = new Posicion(fila, j);
-                if (puedeComer(actual)) {
-                    posiciones.add(actual);
-                }
-            }
-        }
-        
-        return posiciones;
+        return resultado;
     }
-    
-    private ArrayList<Posicion> listarPosDiagonal() {
-        ArrayList<Posicion> posiciones = new ArrayList<Posicion>();
-                
-        boolean frenar = false;
+ 
+    /**Es un metodo auxiliar de listarPosSegunDireccion.
+    * @param direccion Representa la direccion en la cual se buscaran las posiciones.
+    * @return Devuelve un arreglo de dos enteros, de los cuales el primero representa el
+    * factor que influira en la fila de la recorrida, y el segundo en la columna.*/
+    private int[] incrementoEnRecorrida(String direccion) {
+        int[] resultado = new int[2];
         
-        int fila = this.inicio.getFila();
-        int col = this.inicio.getCol();
-        
-        //DE IZQ A DERECHA CRECIENTE
-        for (int i = fila-1, j = col+1; i >= 0 && j < this.tablero.getTamanio() && !frenar; i--, j++) {
-            if (!this.tablero.esLugarVacio(i, j)) {
-                frenar = true;
-                Posicion actual = new Posicion(i, j);
-                if (puedeComer(actual)) {
-                    posiciones.add(actual);
-                }
-            }
+        if (direccion.equals("vertical creciente") || direccion.equals("vertical decreciente")) {
+            resultado[0] = 0;
+        }
+        if (direccion.equals("horizontal creciente") || direccion.equals("horizontal decreciente")) {
+            resultado[1] = 0;
+        }
+        if (direccion.equals("izquierda derecha creciente") || direccion.equals("derecha izquierda creciente") 
+                || direccion.equals("horizontal decreciente")) {
+            resultado[0] = -1;
+        }
+        if (direccion.equals("izquierda derecha decreciente") || direccion.equals("derecha izquierda decreciente") 
+                || direccion.equals("horizontal creciente")) {
+            resultado[0] = 1;
+        }
+        if (direccion.equals("derecha izquierda decreciente") || direccion.equals("derecha izquierda creciente") 
+                || direccion.equals("vertical decreciente")) {
+            resultado[1] = -1;
+        }
+        if (direccion.equals("izquierda derecha creciente") || direccion.equals("izquierda derecha decreciente") 
+                || direccion.equals("vertical creciente")) {
+            resultado[1] = 1;
         }
         
-        frenar = false;
-        
-        //DE IZQ A DER DECRECIENTE
-        for (int i = fila+1, j = col+1; i < this.tablero.getTamanio() && j < this.tablero.getTamanio() && !frenar; i++, j++) {
-            if (!this.tablero.esLugarVacio(i, j)) {
-                frenar = true;
-                Posicion actual = new Posicion(i, j);
-                if (puedeComer(actual)) {
-                    posiciones.add(actual);
-                }
-            }
-        }
-        
-        frenar = false;
-        
-        //DE DER A IZQ CRECIENTE
-        for (int i = fila-1, j = col-1; i >= 0 && j >= 0 && !frenar; i--, j--) {
-            if (!this.tablero.esLugarVacio(i, j)) {
-                frenar = true;
-                Posicion actual = new Posicion(i, j);
-                if (puedeComer(actual)) {
-                    posiciones.add(actual);
-                }
-            }
-        }
-        
-        frenar = false;
-        
-        //DE DER A IZQ DECRECIENTE
-        for (int i = fila+1, j = col-1; i < this.tablero.getTamanio() && j >= 0 && !frenar; i++, j--) {
-            if (!this.tablero.esLugarVacio(i, j)) {
-                frenar = true;
-                Posicion actual = new Posicion(i, j);
-                if (puedeComer(actual)) {
-                    posiciones.add(actual);
-                }
-            }
-        }
-
-        return posiciones;
+        return resultado;
     }
-    
-    protected boolean puedeComer(Posicion fin) {
-        boolean valida = false;
-        
-        if (inicio.getFichaEnPos(this.tablero) == 'R') {
-            valida = fin.getFichaEnPos(this.tablero) == 'A' && 
-                    inicio.getDistanciaAlCentro() >= fin.getDistanciaAlCentro();
-        } else if (inicio.getFichaEnPos(this.tablero) == 'A') {
-            valida = fin.getFichaEnPos(this.tablero) == 'R' && 
-                    inicio.getDistanciaAlCentro() >= fin.getDistanciaAlCentro();
-        }
-        
-        return valida;
-    } 
 }
