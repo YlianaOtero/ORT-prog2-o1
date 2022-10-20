@@ -1,39 +1,41 @@
-/*Sistema se encarga de la ejecución. Esta es la clase del main.*/
 package interfaz;
 
 import dominio.Jugador;
 import dominio.ListaJugadores;
 import dominio.Ranking;
-/**
- *
- * @author ylian
- */
-public class Sistema {
+
+/**Sistema guarda la configuracion de sistema del juego. Contiene el menu y las 
+ * acciones que se realizan desde este. 
+ * Es una clase abstracta porque no nos interesa crear objetos de tipo Sistema, y
+ * sus metodos son static porque nos permite llamarlos desde otras clases sin necesidad
+ * de instanciar Sistema en ellas.
+ * @author yliana*/
+
+public abstract class Sistema {
 
     private static ListaJugadores Jugadores = new ListaJugadores();
     private static String ConfigTablero = "Standard";
-
-    public static void main(String[] args) {
-        menuInicial();
-    }
-
-    //METODOS DE MENU
+    
+    /** Muestra por pantalla el menu principal del juego.*/
     public static void menuInicial() {
-        System.out.println("********************************\n"
-                + " BIENVENIDO AL JUEGO DISTANCIA\n"
-                + "********************************\n"
+        System.out.println("************************************************\n"
+                + "         BIENVENIDO AL JUEGO DISTANCIA          \n"
+                + "************************************************\n"
                 + "a. Registrar jugador\n"
                 + "b. Establecer tablero\n"
                 + "c. Jugar partida\n"
                 + "d. Ver ranking\n"
                 + "e. Salir del menu\n"
                 + "Escribe una de las opciones:\n"
-                + "********************************\n");
+                + "************************************************\n");
 
         char opcion = Lectura.leerOpcionMenu('a', 'e');
         opciones(opcion);
     }
 
+    /** Llama a los metodos que realizan las acciones correspondientes a cada 
+     * opcion del menu inicial.
+     * @param opcion Opcion elegida del menu inicial.*/
     public static void opciones(char opcion) {
         opcion = Character.toLowerCase(opcion);
         switch (opcion) {
@@ -52,6 +54,7 @@ public class Sistema {
             case 'c' -> {
                 System.out.println("Has seleccionado Jugar partida");
                 jugarPartida();
+                volverAlMenu();
             }
             case 'd' -> {
                 System.out.println("Has seleccionado Ranking");
@@ -59,16 +62,18 @@ public class Sistema {
                 volverAlMenu();
             }
             case 'e' ->
-                System.out.println("Gracias por usar el programa.");
+                System.out.println("************************************************\n"
+                        + "          Gracias por usar nuestro juego.       \n"
+                        + "************************************************\n");
         }
     }
 
     public static void volverAlMenu() {
-        System.out.println("********************************\n"
+        System.out.println("************************************************\n"
                 + "Desea volver al menu principal? \n"
                 + "a. Si. \n"
                 + "b. No. \n"
-                + "********************************\n");
+                + "************************************************\n");
 
         char opcion = Lectura.leerOpcionMenu('a', 'b');
 
@@ -76,13 +81,11 @@ public class Sistema {
             case 'a' ->
                 menuInicial();
             case 'b' ->
-                System.out.println("********************************\n"
-                        + " Gracias por usar el programa. \n "
-                        + "********************************\n");
+                opciones('e');
         }
     }
 
-    //METODOS DE OPCION
+    /*METODOS DE OPCION*/
     private static void establecerTablero(String tipo) {
         ConfigTablero = tipo;
         System.out.println("Se ha seleccionado " + tipo + " como tipo de tablero.");
@@ -96,20 +99,26 @@ public class Sistema {
     }
 
     private static void jugarPartida() {
-        Jugador[] jugadores = pedirJugadoresPartida();
-        Partida nueva = new Partida(ConfigTablero, jugadores);
-        nueva.iniciarPartida();
+        if (Jugadores.largo() > 1) {
+            Jugador[] jugadores = pedirJugadoresPartida();
+            Partida nueva = new Partida(ConfigTablero, jugadores);
+            nueva.iniciarPartida();
+            ConfigTablero = "Standard";
+        } else {
+            System.out.println("Debe tener al menos dos jugadores registrados para poder jugar.");
+            volverAlMenu();
+        }
     }
 
     private static void verRanking() {
-        //MOSTRAR RANKING
         Ranking ranking = new Ranking(Jugadores);
         System.out.println(ranking);
     }
 
-    //PETICIONES AL USUARIO
+    /*PETICIONES AL USUARIO*/
     private static String pedirTipoTablero() {
-        System.out.println("Ingrese el tablero a usar: \n"
+        System.out.println("************************************************\n"
+                + "Ingrese el tablero a usar: \n"
                 + "a. Standard\n"
                 + "b. Precargado 1\n"
                 + "c. Precargado 2\n"
@@ -151,12 +160,12 @@ public class Sistema {
         mostrarListaJugadores();
 
         System.out.println("Elija al jugador 1:");
-        jugadores[0] = Jugadores.jugadorAt(Lectura.leerOpcionJugadores(Jugadores.size()) - 1);
+        jugadores[0] = Jugadores.jugadorEnPos(Lectura.leerOpcionJugadores(Jugadores.largo()) - 1);
 
         boolean repetido = true;
         System.out.println("Elija al jugador 2:");
         while (repetido) {
-            jugadores[1] = Jugadores.jugadorAt(Lectura.leerOpcionJugadores(Jugadores.size()) - 1);
+            jugadores[1] = Jugadores.jugadorEnPos(Lectura.leerOpcionJugadores(Jugadores.largo()) - 1);
             if (jugadores[1].getAlias().equals(jugadores[0].getAlias())) {
                 System.out.println("Debe elegir dos jugadores diferentes. Ingrese otra opcion:");
             } else {
@@ -167,11 +176,6 @@ public class Sistema {
     }
 
     private static void mostrarListaJugadores() {
-        System.out.println("********************************\n"
-                + "       JUGADORES: \n"
-                + "********************************\n"
-                + "   Nombre            Alias           Edad");
         System.out.println(Jugadores);
-        System.out.println("********************************");
     }
 }
