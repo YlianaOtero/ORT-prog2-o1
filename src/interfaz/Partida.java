@@ -1,16 +1,11 @@
-/* Representa una partida puntual del juego Distancia. */
 package interfaz;
 
-import dominio.Jugador;
-import dominio.ListaPosConCaptura;
-import dominio.ListaPosSinCaptura;
-import dominio.Posicion;
-import dominio.Tablero;
+import dominio.*;
 
 /**
- *
- * @author ylian
- */
+ /** Representa una partida puntual del juego Distancia.
+ * @author yliana*/
+
 public class Partida {
     private final Jugador jugador1; //Rojo
     private final Jugador jugador2; //Azul
@@ -21,6 +16,8 @@ public class Partida {
     public Partida(String configTablero, Jugador[] jugadores) {
         this.jugador1 = jugadores[0];
         this.jugador2 = jugadores[1];
+        this.jugador1.aumentarPartidas();
+        this.jugador2.aumentarPartidas();
         this.tablero = new Tablero(configTablero);
     }
     
@@ -43,6 +40,10 @@ public class Partida {
     }
     
     /*BASICOS DEL JUEGO*/
+    
+    /** Comienza una partida y se encarga de llamar al metodo jugada segun el turno
+     * que corresponda. Una vez alguien se queda sin fichas o se rinde, finaliza
+     * la partida y se settea el ganador.*/
     public void iniciarPartida() {
         int valor = jugada(jugador1);
         Jugador ultimo = jugador1;
@@ -68,6 +69,7 @@ public class Partida {
     private void finPartida() {
         System.out.println("Fin de la partida! \n"
                 + "El ganador es " +this.ganador.getAlias());
+        this.ganador.aumentarVictorias();
     }
     
     private int jugada(Jugador unJugador) {
@@ -119,12 +121,21 @@ public class Partida {
         return pos;
     }
     
-    //Si retorna 0, se movio sin captura. Si retorna 1, se movio con captura. Si retorna -1, se rindio.
+    /** Es responsable del movimiento final de un turno. Este puede ser desplazarse
+     * con o sin captura, rendirse, o resetear la posicion (volver a elegir una 
+     * posicion inicial).
+     * @param unJugador Puede ser jugador1 o jugador2.
+     * @param posInicial La posicion elegida inicialmente (marcada con 'E' en el tablero).
+     * @return Devuelve un entero. Si es -1, es porque el jugador se ha rendido. 
+     * Si retorna 0, se movio sin captura. Si retorna 1, se movio con captura. */
     private int movimientoFinal(Jugador unJugador, Posicion posInicial) {
         int retorno = 0;
         
-        ListaPosConCaptura movsConCaptura = new ListaPosConCaptura(posInicial, this.tablero);
-        ListaPosSinCaptura movsSinCaptura = new ListaPosSinCaptura(posInicial, this.tablero);
+        ListaPosPosibles.setInicio(posInicial);
+        ListaPosPosibles.setTablero(this.tablero);
+        
+        ListaPosConCaptura movsConCaptura = new ListaPosConCaptura();
+        ListaPosSinCaptura movsSinCaptura = new ListaPosSinCaptura();
         
         DisplayTablero.mostrarTableroPosibilidades(movsConCaptura, movsSinCaptura, posInicial, this);
 
@@ -134,33 +145,40 @@ public class Partida {
             retorno = -1;
         } else {
             MapeoPosicion mapFinal = new MapeoPosicion(posFinalString);
-            if (!esJugadaFinalCorrecta(movsConCaptura, movsSinCaptura, mapFinal.getPosicion())) {
+            if (!esJugadaFinalCorrecta(movsConCaptura, movsSinCaptura, mapFinal.posTableroCorrespondiente())) {
                 System.out.println("Ha elegido una posicion incorrecta. \n"
                         + "Se ha reseteado la jugada");
                 jugada(unJugador);
             } else if (retorno != -1) {
-                retorno = moverse(movsConCaptura, movsSinCaptura, posInicial, mapFinal.getPosicion());
+                retorno = moverse(movsConCaptura, movsSinCaptura, posInicial, mapFinal.posTableroCorrespondiente());
             }
         }
         
         return retorno;
     }
     
+    /** Ejecuta el movimiento.
+     * @param movsConCaptura Lista de movimientos posibles con captura, para inicio.
+     * @param movsSinCaptura Lista de movimientos posibles sin captura, para inicio.
+     * @param inicio La posicion elegida inicialmente (marcada con 'E' en el tablero).
+     * @param fin La posicion a la cual se debe mover la ficha en inicio.
+     * @return Devuelve un entero. Si retorna 0, se movio sin captura. Si retorna 1, 
+     * se movio con captura. */
     private int moverse(ListaPosConCaptura movsConCaptura, ListaPosSinCaptura movsSinCaptura,
                         Posicion inicio, Posicion fin) {
         int retorno = 0;
         
-        if (movsConCaptura.estaEnLaLista(fin)) {
+        if (ListaPosPosibles.estaEnLaLista(fin, movsConCaptura.getLista())) {
             tablero.comerFicha(inicio.getFila(), inicio.getCol(), fin.getFila(), fin.getCol());
             retorno = 1;
-        } else if (movsSinCaptura.estaEnLaLista(fin)) {
+        } else if (ListaPosPosibles.estaEnLaLista(fin, movsSinCaptura.getLista())) {
             tablero.desplazarFicha(inicio.getFila(), inicio.getCol(), fin.getFila(), fin.getCol());
-        }
+        } 
         
         return retorno;
     }
     
-    /*PREDICADOS*/
+    /*PREDICADOS: ayudan a controlar que las jugadas puedan darse de manera correcta.*/
     private boolean hayJugadasPosibles(Jugador unJugador) {
         boolean hay = false;
         char ficha = 'R';
@@ -168,13 +186,18 @@ public class Partida {
             ficha = 'A';
         }  
         
+        ListaPosPosibles.setTablero(tablero);
+        
         for (int i = 0; i < tablero.getTamanio() && !hay; i++) {
             for (int j = 0; j < tablero.getTamanio() && !hay; j++) {
                 if (tablero.getFicha(i, j) == ficha) {
                     Posicion pos = new Posicion(i, j);
-                    ListaPosConCaptura movsConCaptura = new ListaPosConCaptura(pos, tablero);
-                    ListaPosSinCaptura movsSinCaptura = new ListaPosSinCaptura(pos, tablero);
-                    if (movsConCaptura.hayMovimientos() || movsSinCaptura.hayMovimientos()) {
+                    ListaPosPosibles.setInicio(pos);
+                    
+                    ListaPosConCaptura movsConCaptura = new ListaPosConCaptura();
+                    ListaPosSinCaptura movsSinCaptura = new ListaPosSinCaptura();
+                    if (ListaPosPosibles.hayPosiciones(movsConCaptura.getLista()) ||  
+                            ListaPosPosibles.hayPosiciones(movsSinCaptura.getLista())) {
                         hay = true;
                     }
                 }
@@ -191,7 +214,8 @@ public class Partida {
     private boolean esJugadaFinalCorrecta(ListaPosConCaptura movsConCaptura, 
                                     ListaPosSinCaptura movsSinCaptura,
                                     Posicion elegida) {
-        return movsConCaptura.estaEnLaLista(elegida) || movsSinCaptura.estaEnLaLista(elegida);
+        return ListaPosPosibles.estaEnLaLista(elegida, movsConCaptura.getLista()) 
+                || ListaPosPosibles.estaEnLaLista(elegida, movsSinCaptura.getLista());
     }
     
     private boolean esJugadaInicialCorrecta(Posicion elegida, Jugador unJugador) {
