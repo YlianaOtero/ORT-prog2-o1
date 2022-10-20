@@ -1,11 +1,8 @@
-/* Perfil del jugador.*/
 package dominio;
 
+/** Perfil del jugador.
+ * @author natalia*/
 
-/**
- *
- * @author nalu-
- */
 public class Jugador {
 
     private String nombre;
@@ -57,22 +54,16 @@ public class Jugador {
         this.alias = unAlias;
     }
     
-    public void setPartidas(int unaPartida){
-        this.partidas= unaPartida;
+    public void aumentarPartidas(){
+        this.partidas++;
     }
     
-    public void setVictorias(int unaVictoria){
-        this.victorias=unaVictoria;
+    public void aumentarVictorias(){
+        this.victorias++;
     }
     
     @Override
     public String toString(){
         return this.getNombre() + "         " + this.getAlias() + "          " + this.getEdad();
     }
-
-    /* TO DO: ARREGLAR ESTO
-     @Override
-     public int compareTo(Jugador j){
-        return j.getVictorias().compareTo(this.getVictorias)
-     }*/
 }
