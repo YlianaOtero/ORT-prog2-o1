@@ -1,14 +1,13 @@
-/*MapeoPosicion define la correspondencia entre una posicion del estilo 
-* "LETRANUMERO" y las correspondientes filas y columnas del tablero.
-* LETRA esta entre la A y la F, y NUMERO entre el 1 y el 5.*/
+/**/
 package interfaz;
 
 import dominio.Posicion;
 
-/**
- *
- * @author ylian
- */
+/** MapeoPosicion define la correspondencia entre una posicion del estilo 
+ * "LETRANUMERO" y las correspondientes filas y columnas del tablero.
+ * LETRA esta entre la A y la F, y NUMERO entre el 1 y el 5.
+ * @author yliana*/
+
 public class MapeoPosicion {
     
     private String posicion;
@@ -28,6 +27,19 @@ public class MapeoPosicion {
         this.fila = fila;
         this.col = col;
     } 
+    
+    /*METODOS DE ACCESO*/
+    public String getPosicion() {
+        return this.posicion;
+    }
+    
+    public int getFila() {
+        return this.fila;
+    }
+    
+    public int getCol() {
+        return this.col;
+    }
     
     /*METODOS AUXILIARES*/
     private int filaCorrespondiente(String posicion) {
@@ -93,21 +105,8 @@ public class MapeoPosicion {
         return posicion;
     }
     
-    /*METODOS DE ACCESO*/
-    public String getPosicionString() {
-        return this.posicion;
-    }
-    
-    public Posicion getPosicion() {
+    public Posicion posTableroCorrespondiente() {
         Posicion pos = new Posicion(this.fila, this.col);
         return pos;
-    }
-    
-    public int getFila() {
-        return this.fila;
-    }
-    
-    public int getCol() {
-        return this.col;
     }
 }
